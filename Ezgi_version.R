@@ -3,6 +3,7 @@ library(skimr)
 library(dplyr) 
 library(formattable)
 library(moments)
+library(gridExtra)
 # Reading and viewing the data set
 setwd("~/Desktop/2020-2021 DS Master/SS21/ICS")
 ics1 <- read.table("census_2020_2000.csv", header=TRUE, sep=",")
@@ -34,13 +35,13 @@ skimr::partition(skim(cont_ics2020))
 ## hist(ics2020$LEB,col="purple",main="Life Expectancy at Birth for Both Sexes (LEB)",xlab = "Avg. no. of years", freq=FALSE)
 ## hist(ics2020$TFR,main="Total Fertility Rate (TFR)",xlab = "Avg. no. of Children",freq=FALSE,col="darkgrey")
 
-h1<-ggplot(ics2020, aes(ics2020[,5],)) + geom_histogram(binwidth=1,fill="lightblue")+xlab("Fertility Rate")
-h2<-ggplot(ics2020, aes(ics2020[,6])) + geom_histogram(binwidth=3,fill="red")+xlab("Average Lifespan Both Sexes")
-h3<-ggplot(ics2020, aes(ics2020[,7])) + geom_histogram(binwidth=3,fill="purple")+xlab("Average Lifespan Male")
-h4<-ggplot(ics2020, aes(ics2020[,8])) + geom_histogram(binwidth=3)+xlab("Average Lifespan Female")
+h1<-ggplot(ics2020, aes(ics2020[,5],)) + geom_histogram(aes(y=..density..),fill="lightblue")+xlab("Fertility Rate")
+h2<-ggplot(ics2020, aes(ics2020[,6])) + geom_histogram(aes(y=..density..),fill="red")+xlab("Life Expectancy at Birth for Both Sexes")
+h3<-ggplot(ics2020, aes(ics2020[,7])) + geom_histogram(aes(y=..density..),fill="purple")+xlab("Life Expectancy at Birth for Males")
+h4<-ggplot(ics2020, aes(ics2020[,8])) + geom_histogram(aes(y=..density..))+xlab("Life Expectancy at Birth for Females")
 
 
-grid.arrange(h1,h2,h3,h4, ncol=2,name="histograms")
+grid.arrange(h1,h2,h3,h4, ncol=2)
 
 
 geom_histogram(alpha=0.6, binwidth = 5) +
