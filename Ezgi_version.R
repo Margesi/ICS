@@ -6,15 +6,14 @@ library(moments)
 # Reading and viewing the data set
 setwd("~/Desktop/2020-2021 DS Master/SS21/ICS")
 ics1 <- read.table("census_2020_2000.csv", header=TRUE, sep=",")
-as.data.frame(ics1)
+ics1<-as.data.frame(ics1)
 #View(ics1)
 head(ics1)
 # Data Structure
 str(ics1)
 sapply(ics1, function(x) length(unique(x)))
 # Renaming variables (columns names)
-names(ics1)[1] <- ("Country")
-names(ics1)[7:10] <- c("TFR","LEB","LEM","LEF")
+names(ics1)[c(1,7:10)] <- c("Country","TFR","LEB","LEM","LEF")
 # Checking for NAs
 ics1 %>% 
   filter(is.na(LEB) == TRUE |is.na(LEM) == TRUE | is.na(LEF) == TRUE | is.na(TFR) == TRUE) %>% 
@@ -30,15 +29,41 @@ cont_ics2020 <-ics2020[,-(1:4)]
 summary(cont_ics2020)
 skimr::partition(skim(cont_ics2020))
 # Histograms to visualize Frequency Distributions 
-hist(ics2020$LEM, col="blue",, main="Life Expectancy at Birth for Males (LEM)", xlab = "Avg. no. of years", freq=FALSE)
-hist(ics2020$LEF, col="red",main="Life Expectancy at Birth for Females (LEF)",xlab = "Avg. no. of years", freq=FALSE)
-hist(ics2020$LEB,col="purple",main="Life Expectancy at Birth for Both Sexes (LEB)",xlab = "Avg. no. of years", freq=FALSE)
-hist(ics2020$TFR,main="Total Fertility Rate (TFR)",xlab = "Avg. no. of Children",freq=FALSE,col="darkgrey")
+## hist(ics2020$LEM, col="blue",, main="Life Expectancy at Birth for Males (LEM)", xlab = "Avg. no. of years", freq=FALSE)
+## hist(ics2020$LEF, col="red",main="Life Expectancy at Birth for Females (LEF)",xlab = "Avg. no. of years", freq=FALSE)
+## hist(ics2020$LEB,col="purple",main="Life Expectancy at Birth for Both Sexes (LEB)",xlab = "Avg. no. of years", freq=FALSE)
+## hist(ics2020$TFR,main="Total Fertility Rate (TFR)",xlab = "Avg. no. of Children",freq=FALSE,col="darkgrey")
+
+h1<-ggplot(ics2020, aes(ics2020[,5],)) + geom_histogram(binwidth=1,fill="lightblue")+xlab("Fertility Rate")
+h2<-ggplot(ics2020, aes(ics2020[,6])) + geom_histogram(binwidth=3,fill="red")+xlab("Average Lifespan Both Sexes")
+h3<-ggplot(ics2020, aes(ics2020[,7])) + geom_histogram(binwidth=3,fill="purple")+xlab("Average Lifespan Male")
+h4<-ggplot(ics2020, aes(ics2020[,8])) + geom_histogram(binwidth=3)+xlab("Average Lifespan Female")
+
+
+grid.arrange(h1,h2,h3,h4, ncol=2,name="histograms")
+
+
+geom_histogram(alpha=0.6, binwidth = 5) +
+  scale_fill_viridis(discrete=TRUE) +
+  scale_color_viridis(discrete=TRUE) +
+  theme_ipsum() +
+  theme(
+    legend.position="none",
+    panel.spacing = unit(0.1, "lines"),
+    strip.text.x = element_text(size = 8)
+  ) +
+  xlab("") +
+  ylab("Assigned Probability (%)") +
+  facet_wrap(~text)
+
+
+
 with(data = ics2020,
      expr = c(LEM = skewness(x = LEM),
               LEF = skewness(x = LEF),
               LEB = skewness(x = LEB),
               TFR = skewness(x = TFR)))
+
 #Mean of difference of Life Expectancy at Birth between Males & Females
 ics2020_diff_SEX <- (ics2020$LEF - ics2020$LEM)
 hist(ics2020_diff_SEX,main="Difference of Life Expectancy at Birth between Females & Males",xlab = "Avg. no. of years",freq=FALSE, breaks=10)
