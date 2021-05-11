@@ -169,3 +169,12 @@ ics_task4 %>%
   labs(title="Life Expectancy at Birth (Both Sexes): 2000 vs. 2020")+
   xlab("2000")+
   ylab("2020")
+
+
+###citing packages
+citation("dplyr")
+citation("skimr")
+citation("moments")
+citation("formattable")
+citation("gridExtra")
+citation("ggplot2")
