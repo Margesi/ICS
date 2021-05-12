@@ -86,7 +86,7 @@ table_cor<-round(cor(db1, method="pearson"),
 db4<-as.data.frame(table_cor)
 formattable(db4)
 formattable(db4) %>% 
-  kable("latex",escape = F, caption = "Correlation Table") 
+  kable("rst",escape = F, caption = "Correlation Table") 
 # due to high correlation of LE between sexes, we will proceed with both sexes variable only
 #Task3
 # Boxplots to visualize homogeneity and heterogeneity
@@ -107,26 +107,32 @@ ics2020_grouped %>%
   coord_flip()
 ggsave("BOXPLOT_TotalFertilityRate.PDF")
 #Grouped means & medians (Region-wise, Subregion-wise)
-ics2020 %>%
+b1<-ics2020 %>%
   dplyr::group_by(Region) %>%
   skim(TFR)
-ics2020 %>%
+b1[-13]
+b2<-ics2020 %>%
   dplyr::group_by(Region) %>%
   skim(LEB)
-ics2020 %>%
+b2[-13]
+b3<-ics2020 %>%
   dplyr::group_by(Subregion) %>%
   skim(TFR)
-ics2020 %>%
+b3[-13]
+b4<-ics2020 %>%
   dplyr::group_by(Subregion) %>%
   skim(LEB)
+b4
 #Feel free to suggest other stuff to summarize
 p20<-as.data.frame(ics2020) %>%
   group_by(Region) %>% summarise(mean_fertility=mean(TFR),mean_LifeExpectancy=mean(LEB),median_Fertility=median(TFR),median_LifeExpectancy=median(LEB) ,sd_fertility=sd(TFR),sd_LifeExpectancy=sd(LEB))
 p21<-as.data.frame(ics2020) %>%
   group_by(Subregion) %>% summarise(mean_fertility=mean(TFR),mean_LifeExpectancy=mean(LEB),median_Fertility=median(TFR),median_LifeExpectancy=median(LEB) ,sd_fertility=sd(TFR),sd_LifeExpectancy=sd(LEB))
 
-formattable(p20) 
-formattable(p21)
+formattable(p20) %>% 
+  kable("latex",escape = F, caption = "Regionswise Comparision") 
+formattable(p21) %>% 
+  kable("latex",escape = F, caption = "Subregionswise Comparision") 
 ?formattable
 #Task4
 ics2000 <- ics1[ics1$Year=="2000",c(-2,-3)]
