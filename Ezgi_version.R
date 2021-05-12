@@ -4,6 +4,8 @@ library(dplyr)
 library(formattable)
 library(moments)
 library(gridExtra)
+library(stargazer)
+library(knitr)
 # Reading and viewing the data set
 setwd("~/Desktop/2020-2021 DS Master/SS21/ICS")
 ics1 <- read.table("census_2020_2000.csv", header=TRUE, sep=",")
@@ -28,6 +30,8 @@ ics2020 <- ics1[ics1$Year=="2020",c(-2,-3)]
 cont_ics2020 <-ics2020[,-(1:4)]
 #Measures of Central Tendency & Spread 
 summary(cont_ics2020)
+stargazer(ics2020,type="text")
+stargazer(ics2020)
 skimr::partition(skim(cont_ics2020))
 # Histograms to visualize Frequency Distributions 
 ## hist(ics2020$LEM, col="blue",, main="Life Expectancy at Birth for Males (LEM)", xlab = "Avg. no. of years", freq=FALSE)
@@ -81,6 +85,8 @@ table_cor<-round(cor(db1, method="pearson"),
                  digits = 4)
 db4<-as.data.frame(table_cor)
 formattable(db4)
+formattable(db4) %>% 
+  kable("latex",escape = F, caption = "Correlation Table") 
 # due to high correlation of LE between sexes, we will proceed with both sexes variable only
 #Task3
 # Boxplots to visualize homogeneity and heterogeneity
@@ -113,18 +119,15 @@ ics2020 %>%
 ics2020 %>%
   dplyr::group_by(Subregion) %>%
   skim(LEB)
-library(tidyverse)
 #Feel free to suggest other stuff to summarize
 p20<-as.data.frame(ics2020) %>%
-  group_by(Region) %>% summarise(mean_fertility=mean(Total.Fertility.Rate),mean_LifeExpectancy=mean(Life.Expectancy.at.Birth..Both.Sexes),median_Fertility=median(Total.Fertility.Rate),median_LifeExpectancy=median(Life.Expectancy.at.Birth..Both.Sexes) ,sd_fertility=sd(Total.Fertility.Rate),sd_LifeExpectancy=sd(Life.Expectancy.at.Birth..Both.Sexes))
+  group_by(Region) %>% summarise(mean_fertility=mean(TFR),mean_LifeExpectancy=mean(LEB),median_Fertility=median(TFR),median_LifeExpectancy=median(LEB) ,sd_fertility=sd(TFR),sd_LifeExpectancy=sd(LEB))
 p21<-as.data.frame(ics2020) %>%
-  group_by(Subregion) %>% summarise(mean_fertility=mean(Total.Fertility.Rate),mean_LifeExpectancy=mean(Life.Expectancy.at.Birth..Both.Sexes),median_Fertility=median(Total.Fertility.Rate),median_LifeExpectancy=median(Life.Expectancy.at.Birth..Both.Sexes) ,sd_fertility=sd(Total.Fertility.Rate),sd_LifeExpectancy=sd(Life.Expectancy.at.Birth..Both.Sexes))
-##Text Output
-t1<-formattable(p20,type="text") 
-formattable(p21,type="text")
-#Latex Output
+  group_by(Subregion) %>% summarise(mean_fertility=mean(TFR),mean_LifeExpectancy=mean(LEB),median_Fertility=median(TFR),median_LifeExpectancy=median(LEB) ,sd_fertility=sd(TFR),sd_LifeExpectancy=sd(LEB))
+
 formattable(p20) 
 formattable(p21)
+?formattable
 #Task4
 ics2000 <- ics1[ics1$Year=="2000",c(-2,-3)]
 cont_ics2000 <-ics2000[,-(1:4)]
