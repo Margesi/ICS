@@ -32,15 +32,12 @@ Height_Data %>%
   xlab("Sport") +
   ylab("Height")
 ggsave("Heights_of_different_Sports.pdf")
-​
 #Normality Assumption: QQ-plots
 ggplot(Height_Data, aes(sample = Height, colour =
                           Sport)) +
   stat_qq() + facet_wrap( ~ Sport, nrow = 2) + stat_qq_line()
-​
 ggplot(Height_Data, aes(sample = Height)) +
   stat_qq() + stat_qq_line()
-​
 #Grouped statistical summary: include sample size!!!!
 Grouped_Summary <-
   as.data.frame(Height_Data) %>%
@@ -50,20 +47,20 @@ Grouped_Summary <-
     "Median (Height)" = median(Height),
     "SD (Height)" = sd(Height)
   )
-​
+
 Grouped_Summary
 ##Reformatting to text
 R_Grouped_Summary <-
   formattable(Grouped_Summary, type = "text")
-​
+
 #Generating Latex code
 xtable(R_Grouped_Summary)
-​
+
 #Task(1): ANOVA (Global Test)
 Anova_Test <-
   aov(Height ~ Sport , data = Height_Data)
 anova(Anova_Test)
 
 #Task(2): Pairwise t-Test + Bonferroni
-pairwise.t.test(Height_Data$Height, Height_Data$Sport)
+pairwise.t.test(Height_Data$Height, Height_Data$Sport,p.adj = "none")
 pairwise.t.test(Height_Data$Height, Height_Data$Sport, p.adj = "bonf")
